@@ -2,18 +2,7 @@
 # ioBroker.viessmann_offline
 ============================
 
-![Number of Installations](http://iobroker.live/badges/viessmann-installed.svg) ![Number of Installations](http://iobroker.live/badges/viessmann-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.viessmann_offline.svg)](https://www.npmjs.com/package/iobroker.viessmann)
-[![Downloads](https://img.shields.io/npm/dm/iobroker.viessmann.svg)](https://www.npmjs.com/package/iobroker.viessmann)
-
-**Tests:**: [![Travis-CI](http://img.shields.io/travis/misanorot/ioBroker.viessmann/master.svg)](https://travis-ci.org/misanorot/ioBroker.viessmann)
-<!-- Windows: [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/misanorot/ioBroker.viessmann?branch=master&svg=true)](https://ci.appveyor.com/project/misanorot/ioBroker-viessmann/) -->
-
-
 [![NPM](https://nodei.co/npm/iobroker.viessmann.png?downloads=true)](https://nodei.co/npm/iobroker.viessmann/)
-
-[![paypal](https://www.paypalobjects.com/en_US/DK/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZYHW84XXF5REJ&source=url)
-
-**[English description](https://github.com/misanorot/ioBroker.viessmann/blob/master/lib/Readme_en.md)**
 
 Mit diesem Adapter ist es möglich, Werte aus einer Viessmann Steuerung
 die mit dem Programm [Vcontrold](https://github.com/openv/vcontrold) kommuniziert,
