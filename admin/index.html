@@ -1,0 +1,433 @@
+<html>
+
+<link rel="stylesheet" type="text/css" href="../../lib/css/themes/jquery-ui/redmond/jquery-ui.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../lib/css/jqGrid/ui.jqgrid-4.5.4.css"/>
+<link rel="stylesheet" type="text/css" href="../../lib/css/jquery.multiselect-1.13.css"/>
+<script type="text/javascript" src="../../lib/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+<script type="text/javascript" src="../../lib/js/jquery-ui-1.10.3.full.min.js"></script>
+<script type="text/javascript" src="../../lib/js/jqGrid/jquery.jqGrid-4.5.4.min.js"></script>
+<script type="text/javascript" src="../../lib/js/jqGrid/grid.locale-all.js"></script>
+
+<link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
+<script type="text/javascript" src="../../js/translate.js"></script>
+<script type="text/javascript" src="../../js/adapter-settings.js"></script>
+<script type="text/javascript" src="words.js"></script>
+
+<style>
+    
+	.head_tab {
+        /*overflow: hidden;*/
+        position: relative;
+        height: calc(100% - 60px);
+        width: calc(100% - 30px);
+    }
+	.back_image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: 0;
+        opacity: 0.2;
+    }
+	.level {
+		z-index: 3;
+	}
+	.button {
+    background-color: white;
+    color: black;
+	border-radius: 12px;
+    border: 2px solid #4CAF50; /* Green */
+}
+	.button:hover {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+	
+Try it Yourself »
+
+</style>
+
+<!-- you have to put your config page in a div with id adapter-container -->
+<div id="adapter-container">
+	<ul>
+        <li><a href="#tab_g"   class="translate">General</a></li>
+        <li><a href="#tab_get" class="translate">Gets</a></li>
+        <li><a href="#tab_set" class="translate">Sets</a></li>
+    </ul>
+    <div id="tab_g" style="display: flex;  align-items: center; flex-direction: column;overflow: auto" class="head_tab">
+	<img src="img/Viessmann_back.png" class="back_image">
+    <div class="level" style="text-align: center; border: 2px solid grey">
+	<table align="center"><tr>
+        <td style="padding-top: 20px;padding-left: auto"><h2 class="translate">adapter settings</h2></td>
+    </tr></table>
+	<div ><a style="margin-top: 2px; color:red; font-weight: bolder;" href="http://openv.wikispaces.com/" target="_blank" class="translate">main desc</a></div>
+	<div style="margin-top: 10px"><a  href="http://www.utilities-online.info/xmltojson/#.WFVQv_DhA1I" target="_blank" class="translate">transform</a></div>
+	<button id="button_import" class="button" style="margin-top: 10px; width: 120px; height: 30px; right: 20">Import JSON</button>
+    <div id="info"></div>
+	<p id="xmlconfig"></p>
+	<h3 class="translate">connection</h3>
+	<p style="color:grey" class="translate">ip desc</p>
+	<table  align="center">
+        <tr><td class="translate">ip</td><td><input class="value" id="ip" type="input" size="15"/></td></tr>
+    </table >
+	 <p style="color:grey" class="translate">port desc</p>
+ 	<table align="center">
+        <tr><td class="translate">port</td><td><input class="value number" id="port" type="input" size="4"/></td></tr>
+    </table>
+	<table style="margin-top: 6px" align="center">
+        <tr><td class="translate">answer</td><td><input class="value" type="checkbox" id="answer"/></td></tr>
+    </table>
+     </div>
+	</div>
+    <div id="tab_get" style="display: flex;  align-items: left; flex-direction: column;overflow: auto" class="head_tab">        
+		<h1 style="margin-top: 25px;" class="translate">getvito</h1>
+		<div><table id="commands_get" style="font-size: 14px"></table></div>
+		
+    </div>
+    <div id="tab_set" style="display: flex;  align-items: left; flex-direction: column;overflow: auto" class="head_tab">
+		<h1 style="margin-top: 25px;" class="translate">setvito</h1>
+		<div><table id="commands_set" style="font-size: 14px"></table></div>
+    </div>
+	<div id="import-dlg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;display: none; z-index: 100">
+        <textarea id="import_textarea" style="width: 100%; height: calc(100% - 40px)"></textarea>
+        <button id="import_button_ok"    style="position: absolute; bottom: 10px; right: 120px;" class="translateB">Import</button>
+        <button id="import_button_cancel" style="position: absolute; bottom: 10px; right: 10px;" class="translateB">Close</button>
+    </div>
+</div>
+
+<!-- you have to define 2 functions in the global scope: -->
+<script type="text/javascript">
+
+ var datapoints = {};
+
+    function Dpoint() {
+        this.name = '';
+        this.description = '';
+        this.polling = '';
+		this.command = '';
+    }
+
+	
+    function setValue(id, value, onChange) {
+        // example: select elements with id=key and class=value and insert value
+		$('.getSelect').change(function (e) {  
+        datapoints.gets[$($(this)[0]).attr('id')].polling = $($(this)[0]).val();
+			onChange();
+		});	
+        if ($('#' + id + '.value').attr('type') == 'checkbox') {
+            $('#' + id + '.value').prop('checked', value).change(function() {
+                onChange();
+            });
+        } else {
+            $('#' + id + '.value').val(value).change(function() {
+                onChange();
+            }).keyup(function() {
+                // Chack that only numbers entered
+                if ($(this).hasClass('number')) {
+                    var val = $(this).val();
+                    if (val) {
+                        var newVal = '';
+                        for (var i = 0; i < val.length; i++) {
+                            if (val[i] >= '0' && val[i] <= '9') {
+                                newVal += val[i];
+                            }
+                        }
+                        if (val != newVal) $(this).val(newVal);
+                    }
+                }
+                onChange();
+            });
+        }
+    }
+    // the function loadSettings has to exist ...
+    function load(settings, onChange) {
+        if (!settings) return;
+        datapoints = settings.datapoints || {};
+		write();
+        for (var key in settings) {
+            setValue(key, settings[key], onChange);
+        }
+        
+        onChange(false);
+		
+		$("#adapter-container").tabs({
+            activate: function (event, ui) {
+                switch(ui.newPanel.selector) {
+                    case '#tab_g':
+                        activePage = 0;
+                        break;
+                    case '#tab_get':
+                        activePage = 1;
+                        break;
+                    case '#tab_set':
+                        activePage = 2;
+                        break;
+                    default:
+                        activePage = 0;
+                        break;
+                }
+                if (typeof localStorage !== 'undefined') {
+                    localStorage['viessmann'] = activePage.toString();
+                }
+            }
+        });
+		if (localStorage && localStorage['viessmann'] !== undefined) {
+			$("#adapter-container").tabs({active: localStorage['viessmann']});
+		}
+    }
+    // ... and the function save has to exist.
+    // you have to make sure the callback is called with the settings object as first param!
+    function save(callback) {
+        // example: select elements with class=value and build settings object
+        var obj = {};
+        $('.value').each(function () {
+            var $this = $(this);
+            if ($this.attr('type') == 'checkbox') {
+                obj[$this.attr('id')] = $this.prop('checked');
+            } else {
+                obj[$this.attr('id')] = $this.val();
+            }
+        });
+        obj.datapoints = datapoints;
+        callback(obj);
+    }
+	
+	$('#button_import').click(function () {
+                    $('#import-dlg').show();
+                    $('#import_textarea').val('').focus();
+                    //$('#import-dlg').data('table', $(this).data('table'));
+                });
+
+        $('#import_button_ok').button({
+            icons: {primary: 'ui-icon-check'},
+            text: _('Import')
+        }).click(function () {
+            getImport();
+            $('#import-dlg').hide();
+            
+        });
+        $('#import_button_cancel').button({
+            icons: {primary: 'ui-icon-close'},
+            text: _('Close')
+        }).click(function () {
+            $('#import-dlg').hide();
+        });
+		
+
+		
+	//*******************************************************
+	function getImport() {
+	datapoints['gets'] = {};
+	datapoints['sets'] = {};
+	datapoints['system'] = {};
+	
+	var json = $('#import_textarea').val();
+    try {
+        var commands = JSON.parse(json);
+    }
+    catch (e) {
+        $('#info').html("Einlesen FEHLGESCHLAGEN!!!" + e).css({ "background-color": "red", "color": "black" });
+    }
+    if (typeof commands.vito.commands.command === "object" && typeof commands.vito.devices.device["-ID"] != "undefined") {
+	
+		datapoints.system = commands.vito.devices.device;	
+		for (var z in commands.vito.commands.command) {
+			var name = '-name';
+			var desc = 'description';
+			var poll = -1;
+			var c = (commands.vito.commands.command[z][name]);
+			var d = (commands.vito.commands.command[z][desc]);
+			if (c.substring(0, 3) === 'get' && c.length > 3) {
+				var dp = new Dpoint();
+				dp.name = c.substring(3, c.length);
+				dp.description = d;
+				dp.polling = poll;
+				dp.command = c;
+				datapoints.gets[c.substring(3, c.length)] = dp;
+				continue;
+			}
+			if(c.substring(0, 3) === 'set' && c.length > 3) {
+				var dps = new Dpoint();
+				dps.name = c.substring(3, c.length);
+				dps.description = d;
+				dps.polling = "nicht möglich";
+				dps.command = c;
+				datapoints.sets[c.substring(3, c.length)] = dps;
+				continue;
+            }
+		}
+		$('#info').html("Einlesen OKAY!!!").css({ "background-color": "green", "color": "black" });
+			write();
+    }
+    else {
+        $('#info').html("Einlesen FEHLGESCHLAGEN!!!").css({ "background-color": "red", "color": "black" });
+    }
+	}
+	
+	function getPollSelect(name, act) {
+		var opt10 = '';
+		var opt30 = '';
+		var opt60 = '';
+		var opt120 = '';
+		var opt300 = '';
+		var opt600 = '';
+		var opt900 = '';
+		var opt1800 = '';
+		var opt2700 = '';
+		var opt3600 = '';
+		var opt7200 = '';
+		var opt21600 = '';
+		var opt43200 = '';
+		var opt86400 = '';
+		
+	
+	if(systemLang == 'de'){
+		var opt10 = 'Alle 10 Sekunden';
+		var opt30 = 'Alle 30 Sekunden';
+		var opt60 = 'Jede Minute';
+		var opt120 = 'Alle 2 Minuten';
+		var opt300 = 'Alle 5 Minuten';
+		var opt600 = 'Alle 10 Minuten';
+		var opt900 = 'Alle 15 Minuten';
+		var opt1800 = 'Alle 30 Minuten';
+		var opt2700 = 'Alle 45 Minuten';
+		var opt3600 = 'Jede Stunde';
+		var opt7200 = 'Alle 2 Stunden';
+		var opt21600 = 'Alle 6 Stunden';
+		var opt43200 = 'Alle 12 Stunden';
+		var opt86400 = 'Alle 24 Stunden';
+	}
+	if(systemLang == 'en'){
+		var opt10 = 'Every 10 seconds';
+		var opt30 = 'Every 30 seconds';
+		var opt60 = 'Each minute';
+		var opt120 = 'Each 2 minutes';
+		var opt300 = 'Each 5 minutes';
+		var opt600 = 'Each 10 minutes';
+		var opt900 = 'Each 15 minutes';
+		var opt1800 = 'Each 30 minutes';
+		var opt2700 = 'Each 45 minutes';
+		var opt3600 = 'Jede Stunde';
+		var opt7200 = 'Each hour';
+		var opt21600 = 'Every 6 hours';
+		var opt43200 = 'Every 12 hours';
+		var opt86400 = 'Every 24 hours';
+	}
+	if(systemLang == 'ru'){
+		var opt10 = '???';
+		var opt30 = '???';
+		var opt60 = '???';
+		var opt120 = '???';
+		var opt300 = '???';
+		var opt600 = '???';
+		var opt900 = '???';
+		var opt1800 = '???';
+		var opt2700 = '???';
+		var opt3600 = '???';
+		var opt7200 = '???';
+		var opt21600 = '???';
+		var opt43200 = '???';
+		var opt86400 = '???';
+	}
+	
+    var sel = '<select id="' + name + '" class="getSelect">' +
+        '<option ' + (act == -1 ? 'selected="selected"' : '') + 'value="-1">------</option>' +
+        //'<option ' + (act == 0 ? 'selected="selected"' : '') + 'value="0">moeglichst Oft</option>' +
+        '<option ' + (act == 10 ? 'selected="selected"' : '') + 'value="10">' + opt10 + '</option>' +
+        '<option ' + (act == 30 ? 'selected="selected"' : '') + 'value="30">' + opt30 + '</option>' +
+        '<option ' + (act == 60 ? 'selected="selected"' : '') + 'value="60">' + opt60 + '</option>' +
+        '<option ' + (act == 120 ? 'selected="selected"' : '') + 'value="120">' + opt120 + '</option>' +
+        '<option ' + (act == 300 ? 'selected="selected"' : '') + 'value="300">' + opt300 + '</option>' +
+        '<option ' + (act == 600 ? 'selected="selected"' : '') + 'value="600">' + opt600 + '</option>' +
+        '<option ' + (act == 900 ? 'selected="selected"' : '') + 'value="900">' + opt900 + '</option>' +
+        '<option ' + (act == 1800 ? 'selected="selected"' : '') + 'value="1800">' + opt1800 + '</option>' +
+        '<option ' + (act == 2700 ? 'selected="selected"' : '') + 'value="2700">' + opt2700 + '</option>' +
+        '<option ' + (act == 3600 ? 'selected="selected"' : '') + 'value="3600">' + opt3600 + '</option>' +
+        '<option ' + (act == 7200 ? 'selected="selected"' : '') + 'value="7200">' + opt7200 + '</option>' +
+        '<option ' + (act == 21600 ? 'selected="selected"' : '') + 'value="21600">' + opt21600 + '</option>' +
+        '<option ' + (act == 43200 ? 'selected="selected"' : '') + 'value="43200">' + opt43200 + '</option>' +
+        '<option ' + (act == 86400 ? 'selected="selected"' : '') + 'value="86400">' + opt86400 + '</option>' +
+        '</select>';
+    return sel;
+}
+
+
+	
+function write() {
+console.log(systemLang);
+var id = '';
+var idname = '';
+var protocol = '';
+var desc = '';
+var name = '';
+var polling = '';
+
+if(systemLang == 'de') {
+	id = 'ID der Anlage: ';
+	idname = 'Name der Anlage: ';
+	protocol = 'Verwendetes Protokoll: ';
+	name = 'Name';
+	desc = 'Bechreibung';
+	polling = 'Abfrageintervall';
+}
+if(systemLang == 'en') {
+	id = 'Plant id: ';
+	idname = 'Plant name: ';
+	protocol = 'Used protocol: ';
+	name = 'Name';
+	desc = 'Description';
+	polling = 'Polling interval';
+}
+if(systemLang == 'ru') {
+	id = '???: ';
+	idname = '???: ';
+	protocol = '???: ';
+	name = '???';
+	desc = '???';
+	polling = '???';
+}
+
+try {
+	$('#xmlconfig').empty();
+	$('#xmlconfig').append(id + '<b>' + datapoints.system["-ID"] + '</b><br>' + idname + '<b>' + datapoints.system["-name"] + '</b><br>' + protocol + '<b>' + datapoints.system["-protocol"] + '</b>');
+    $('#commands_get').empty();
+    $('#commands_get').append('<tr><th>' + name + '</th><th>' + desc + '</th><th>' + polling + '</th>');
+	$('#commands_set').empty();
+    $('#commands_set').append('<tr><th>' + name + '</th><th>' + desc + '</th>');
+    for (var x in datapoints.gets) {
+        var name_g = datapoints.gets[x].name;
+        var desc_g = datapoints.gets[x].description;
+        var poll_g = datapoints.gets[x].polling;
+
+        var tr = $('<tr>');
+        var tds = $('<td>' + name_g + '</td><td>' + desc_g + '</td><td>' + getPollSelect(name_g, poll_g) + '</td>');
+        tr.append(tds);
+        $('#commands_get').append(tr);
+	}
+	for (var y in datapoints.sets) {
+        var name_s = datapoints.sets[y].name;
+        var desc_s = datapoints.sets[y].description;
+       
+        var tr_s = $('<tr>');
+        var tds_s = $('<td>' + name_s + '</td><td>' + desc_s + '</td>');
+        tr_s.append(tds_s);
+        $('#commands_set').append(tr_s);
+	}
+}
+catch (e) {
+$('#xmlconfig').empty();
+	$('#xmlconfig').append('ID der Anlage: <br>Name der Anlage: <br>Verwendetes Protokoll: ');
+    $('#commands_get').empty();
+    $('#commands_get').append('<tr><th>' + name + '</th><th>' + desc + '</th><th>' + polling + '</th>');
+	$('#commands_set').empty();
+    $('#commands_set').append('<tr><th>' + name + '</th><th>' + desc + '</th>');
+}
+	
+}	
+
+</script>
+
+
+</html>
