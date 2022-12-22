@@ -1,6 +1,6 @@
 {
-  "_from": "iobroker.viessmann_offline@0.5.0",
-  "_id": "iobroker.viessmann_offline@0.5.0",
+  "_from": "iobroker.viessmann_offline@2.0.0",
+  "_id": "iobroker.viessmann_offline@2.0.0",
   "_inBundle": false,
   "_integrity": "sha512-4uIUksVdI2272Y3lRsET9LL71tRlBdr2td2VgqU+DP2l21HpiFNXsnLeqQVhrHsh9QijPEAMMHgG5SghV5f3OQ==",
   "_location": "/iobroker.viessmann_offline",
@@ -8,20 +8,20 @@
   "_requested": {
     "type": "version",
     "registry": true,
-    "raw": "iobroker.viessmann_offline@0.5.0",
+    "raw": "iobroker.viessmann_offline@2.0.0",
     "name": "iobroker.viessmann_offline",
     "escapedName": "iobroker.viessmann_offline",
-    "rawSpec": "0.5.0",
+    "rawSpec": "2.0.0",
     "saveSpec": null,
-    "fetchSpec": "0.5.0"
+    "fetchSpec": "2.0.0"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/iobroker.viessmann_offline/-/iobroker.viessmann_offline-0.5.0.tgz",
+  "_resolved": "https://registry.npmjs.org/iobroker.viessmann_offline/-/iobroker.viessmann_offline-2.0.0.tgz",
   "_shasum": "9d5548c4b65cf3956fd26829a627466ce20f09d4",
-  "_spec": "iobroker.viessmann_offline@0.5.0",
+  "_spec": "iobroker.viessmann_offline@2.0.0",
   "_where": "/",
   "author": {
     "name": "misanorot",
@@ -74,5 +74,5 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit"
   },
-  "version": "0.5.0"
+  "version": "2.0.0"
 }

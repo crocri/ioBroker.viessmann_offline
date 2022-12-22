@@ -1,9 +1,9 @@
 {
   "common": {
     "name": "viessmann",
-    "version": "0.5.0",
+    "version": "2.0.0",
     "news": {
-      "0.5.0": {
+      "2.0.0": {
         "en": "new fork for offline Viessman",
         "de": "neuer Zweig für offline Viessmann"
       }
@@ -35,7 +35,7 @@
     "loglevel": "info",
     "type": "climate-control",
     "enabled": true,
-    "installedFrom": "iobroker.viessmann_offline@0.5.0"
+    "installedFrom": "iobroker.viessmann_offline@2.0.0"
   },
   "native": {
     "datapoints": {},
