@@ -19,7 +19,7 @@
 =======
 ============================
 
-[![NPM](https://nodei.co/npm/iobroker.viessmann.png?downloads=true)](https://nodei.co/npm/iobroker.viessmann/)
+[![NPM](https://nodei.co/npm/iobroker.viessmann.png?downloads=true)](https://nodei.co/npm/iobroker.viessmann_offline/)
 
 >>>>>>> 42a5ef17a0fa841a77fa0cea90a2dbb726861926
 Mit diesem Adapter ist es möglich, Werte aus einer Viessmann Steuerung
