@@ -1,5 +1,6 @@
 ![Logo](admin/viessmann.png)
 # ioBroker.viessmann_offline
+<<<<<<< HEAD
 ===========================
 
 ![Number of Installations](http://iobroker.live/badges/viessmann-installed.svg) ![Number of Installations](http://iobroker.live/badges/viessmann-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.viessmann.svg)](https://www.npmjs.com/package/iobroker.viessmann_offline)
@@ -15,6 +16,12 @@
 
 **[English description](https://github.com/crocri/ioBroker.viessmann_offline/Readme_en.md)**
 
+=======
+============================
+
+[![NPM](https://nodei.co/npm/iobroker.viessmann.png?downloads=true)](https://nodei.co/npm/iobroker.viessmann/)
+
+>>>>>>> 42a5ef17a0fa841a77fa0cea90a2dbb726861926
 Mit diesem Adapter ist es möglich, Werte aus einer Viessmann Steuerung
 die mit dem Programm [Vcontrold](https://github.com/openv/vcontrold) kommuniziert,
 in Objekten zu speichern.
@@ -71,9 +78,6 @@ mit dem gewünschten *get* Wert beschrieben werden.
 
 *die benutzten Bilder stammen von www.viessmann.com.*
 
-## ToDo
-	- Anderung der Vito.xml ohne Verlust der Einstellungen
-	- Implementierung Unit on/off
 
 **[CHANGELOG](https://github.com/crocri/ioBroker.viessmann_offline/changelog.md)**
 
