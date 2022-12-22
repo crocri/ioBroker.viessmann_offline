@@ -60,11 +60,8 @@ mit dem gewünschten *get* Wert beschrieben werden.
 
 *die benutzten Bilder stammen von www.viessmann.com.*
 
-## ToDo
-	- Anderung der Vito.xml ohne Verlust der Einstellungen
-	- Implementierung Unit on/off
 
-**[CHANGELOG](https://github.com/misanorot/ioBroker.viessmann/blob/master/changelog.md)**
+**[CHANGELOG](https://github.com/crocri/ioBroker.viessmann_offline/changelog.md)**
 
 ### License
 
