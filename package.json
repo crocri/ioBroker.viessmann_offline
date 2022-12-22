@@ -1,16 +1,16 @@
 {
-  "_from": "iobroker.viessmann_offline@2.0.0",
-  "_id": "iobroker.viessmann_offline@2.0.0",
+  "_from": "iobroker.viessmann@2.0.0",
+  "_id": "iobroker.viessmann@2.0.0",
   "_inBundle": false,
   "_integrity": "sha512-4uIUksVdI2272Y3lRsET9LL71tRlBdr2td2VgqU+DP2l21HpiFNXsnLeqQVhrHsh9QijPEAMMHgG5SghV5f3OQ==",
-  "_location": "/iobroker.viessmann_offline",
+  "_location": "/iobroker.viessmann",
   "_phantomChildren": {},
   "_requested": {
     "type": "version",
     "registry": true,
-    "raw": "iobroker.viessmann_offline@2.0.0",
-    "name": "iobroker.viessmann_offline",
-    "escapedName": "iobroker.viessmann_offline",
+    "raw": "iobroker.viessmann@2.0.0",
+    "name": "iobroker.viessmann",
+    "escapedName": "iobroker.viessmann",
     "rawSpec": "2.0.0",
     "saveSpec": null,
     "fetchSpec": "2.0.0"
@@ -19,9 +19,9 @@
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/iobroker.viessmann_offline/-/iobroker.viessmann_offline-2.0.0.tgz",
+  "_resolved": "https://registry.npmjs.org/iobroker.viessmann/-/iobroker.viessmann-2.0.0.tgz",
   "_shasum": "9d5548c4b65cf3956fd26829a627466ce20f09d4",
-  "_spec": "iobroker.viessmann_offline@2.0.0",
+  "_spec": "iobroker.viessmann@2.0.0",
   "_where": "/",
   "author": {
     "name": "misanorot",
@@ -63,7 +63,7 @@
   ],
   "license": "MIT",
   "main": "main.js",
-  "name": "iobroker.viessmann_offline",
+  "name": "iobroker.viessmann",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/crocri/ioBroker.viessmann_offline.git"
