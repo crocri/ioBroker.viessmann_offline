@@ -659,7 +659,8 @@ function main() {
 		adapter.log.debug('RAW Data: ' + data);
 		// let data_lines = data.replace(/\n$/,'').split(/(vctrld>)(?!$)/).filter(Boolean)
 		// let data_lines = data.replace(/\n$/,'').replace(/^vctrld>/,'vctrld>\n').replace(/\ vctrld>$/,'\nvctrld>').replace(/\ vctrld>/g,'\nvctrld>\n').split('\n').filter(Boolean)
-		let data_lines = data.replace(/vctrld>/g,'\n').replace(/\n$/g,'').split('\n').filter(Boolean)
+		// let data_lines = data.replace(/vctrld>/g,'\n').replace(/\n$/g,'').split('\n').filter(Boolean)
+		let data_lines = data.replace(/vctrld>/g,'\n').replace(/\n$/g,'').replace(/\n([0-9]):/g,' $1:').split('\n').filter(Boolean)
 
 		data_lines.forEach( (data) => {
 			// data = data.replace(/\n$/,'').replace(/\n/g,',').trim()
