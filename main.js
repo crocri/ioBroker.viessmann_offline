@@ -524,7 +524,7 @@ function stepPolling() {
     }
 
     if(step == Object.keys(toPoll)[Object.keys(toPoll).length - 1] || step === -1)
-        adapter.setState('info.lastPoll', Math.floor(time/1000), true, true);
+        adapter.setState('info.lastPoll', Math.floor(time/1000), true);
 
     if (step === -1) {
         adapter.log.debug('Wait for next run: ' + actualMinWaitTime + ' in ms');
