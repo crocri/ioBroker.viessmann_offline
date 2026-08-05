@@ -1,9 +1,9 @@
 {
   "common": {
     "name": "viessmann",
-    "version": "2.0.0",
+    "version": "20.0.0",
     "news": {
-      "2.0.0": {
+      "20.0.0": {
         "en": "new fork for offline Viessman",
         "de": "neuer Zweig für offline Viessmann"
       }
